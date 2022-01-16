@@ -54,3 +54,22 @@ func AddTodo(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusCreated).JSON(todo)
 }
+
+func DeleteTodo(c *fiber.Ctx) error {
+	todoId := c.Params("todoId")
+	id, err := strconv.Atoi(todoId)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "could not parse id"})
+	}
+
+	var todo models.Todo
+	db := database.DBConn
+	if err := db.First(&todo, id).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Todo not found"})
+	}
+
+	// delete todo
+	db.Delete(&todo)
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"status": "todo deleted successfully."})
+}
