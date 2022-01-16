@@ -1,22 +1,23 @@
 package database
 
 import (
+	"fmt"
 	"go-fiber-todos/models"
 
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var DBConn *gorm.DB
 
 func Connect() {
-	dsn := "host=localhost user=postgres password=postgres dbname=go_todo port=5432 sslmode=disable TimeZone=Africa/Accra"
-	connection, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("todo.db"), &gorm.Config{})
 	if err != nil {
-		panic("Could not connect to database")
+		fmt.Println("Could not connect to database")
+		panic(err.Error())
 	}
 
-	DB = connection
+	DBConn = db
 
-	connection.AutoMigrate(&models.Todo{})
+	db.AutoMigrate(&models.Todo{})
 }
