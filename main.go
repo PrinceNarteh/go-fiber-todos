@@ -27,5 +27,11 @@ func main() {
 	routes := app.Group("/api/todos")
 	router.TodoRoutes(routes)
 
-	app.Listen(PORT)
+	// listen/Serve the new Fiber app
+	err := app.Listen(PORT)
+
+	// handle panic errors => panic built-in function that stops the execution of a function and immediately normal execution of that function with an error
+	if err != nil {
+		panic(err)
+	}
 }
