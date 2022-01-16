@@ -8,4 +8,5 @@ import (
 
 func TodoRoutes(router fiber.Router) {
 	router.Get("/", controllers.GetAllTodos)
+	router.Get("/:todoId", controllers.GetTodo)
 }
